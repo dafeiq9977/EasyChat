@@ -1,5 +1,7 @@
 #pragma once
 #include "CommenHeaders.h"
+
+// 线程包装类
 class ScopedThread {
 private:
 	std::thread t;
