@@ -5,12 +5,12 @@
 #include "ScopedThread.h"
 #include "Constants.h"
 
-// ClientÏß³Ì
+// Clientçº¿ç¨‹
 Client::Client(int p_) :port(p_),bridge(false) {
 
 }
 
-// ¸ºÔğ¿Í»§¶Ëµ½·şÎñÆ÷µÄÁ¬½ÓºÍµÇÂ¼·¢ĞÅÏ¢×¢²áµÈÒµÎñ
+// è´Ÿè´£å®¢æˆ·ç«¯åˆ°æœåŠ¡å™¨çš„è¿æ¥å’Œç™»å½•å‘ä¿¡æ¯æ³¨å†Œç­‰ä¸šåŠ¡
 void Client::start(Client & cln) {
 	SOCKET sock;
 	sockaddr_in sockAddr;
@@ -23,15 +23,15 @@ void Client::start(Client & cln) {
 	int len = 0;
 	char buffer[1024];
 	memset(buffer, 0, 1024);
-	// Ñ­»·´¦Àí¸÷ÖÖÒµÎñ
+	// å¾ªç¯å¤„ç†å„ç§ä¸šåŠ¡
 	while (status != Client::QUIT) {
 		switch (status) {
-		// µÇÂ¼ÒµÎñ
+		// ç™»å½•ä¸šåŠ¡
 		case Client::LOGIN:
 			cln.bridge = false;
 			sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-			//Ïò·şÎñÆ÷·¢ÆğÇëÇó
-			memset(&sockAddr, 0, sizeof(sockAddr));  //Ã¿¸ö×Ö½Ú¶¼ÓÃ0Ìî³ä
+			//å‘æœåŠ¡å™¨å‘èµ·è¯·æ±‚
+			memset(&sockAddr, 0, sizeof(sockAddr));
 			sockAddr.sin_family = AF_INET;
 			sockAddr.sin_addr.s_addr = htonl(2130706433);
 			sockAddr.sin_port = htons(5010);
@@ -43,16 +43,16 @@ void Client::start(Client & cln) {
 				exit(-1);
 				std::cout << GetLastError() << std::endl;
 			}
-			std::cout << "ÇëÊäÈëÄãµÄÓÃ»§Ãû£º";
+			std::cout << "è¯·è¾“å…¥ä½ çš„ç”¨æˆ·åï¼š";
 			std::cin >> userName;
-			std::cout << "ÇëÊäÈëÄãµÄÃÜÂë£º";
+			std::cout << "è¯·è¾“å…¥ä½ çš„å¯†ç ï¼š";
 			std::cin >> passWord;
 			std::cin.get();
 			(cln.sendContent) = (std::string)"1Server" + SPLITTER + userName + SPLITTER + passWord;
 			send(sock, (cln.sendContent).c_str(), (cln.sendContent).size(), 0);
 			len = recv(sock, buffer, 1024, 0);
 			(cln.recvContent).assign(buffer);
-			// ½âÎö·şÎñÆ÷·µ»ØµÄµÇÂ¼ĞÅÏ¢
+			// è§£ææœåŠ¡å™¨è¿”å›çš„ç™»å½•ä¿¡æ¯
 			while (len > 0) {
 				msg = interprete(cln.recvContent, 0);
 				int length = messageLength(msg);
@@ -66,16 +66,16 @@ void Client::start(Client & cln) {
 			}
 			std::cout.flush();
 			break;
-		// ¹¦ÄÜÑ¡Ôñ½çÃæ
+		// åŠŸèƒ½é€‰æ‹©ç•Œé¢
 		case Client::ONLINE:
-			std::cout << "ÇëÊäÈëÄúµÄĞèÇó£º" << std::endl;
-			std::cout << "1. µÇÂ½" << std::endl;
-			std::cout << "2. ×¢²á" << std::endl;
-			std::cout << "3. °ïÖú" << std::endl;
-			std::cout << "4. ÍË³ö" << std::endl;
+			std::cout << "è¯·è¾“å…¥æ‚¨çš„éœ€æ±‚ï¼š" << std::endl;
+			std::cout << "1. ç™»é™†" << std::endl;
+			std::cout << "2. æ³¨å†Œ" << std::endl;
+			std::cout << "3. å¸®åŠ©" << std::endl;
+			std::cout << "4. é€€å‡º" << std::endl;
 			std::cin.getline(buffer, 1024);
 			option.assign(buffer);
-			// ÇĞ»»¿Í»§¶ËµÄ×´Ì¬
+			// åˆ‡æ¢å®¢æˆ·ç«¯çš„çŠ¶æ€
 			if (option == "1") {
 				status = Client::LOGIN;
 			}
@@ -90,10 +90,10 @@ void Client::start(Client & cln) {
 				status = Client::QUIT;
 			}
 			else {
-				std::cout << "ÊäÈëÓĞÎó£¬ÇëÑ¡ÔñÏàÓ¦µÄÊı×Ö£¡" << std::endl;
+				std::cout << "è¾“å…¥æœ‰è¯¯ï¼Œè¯·é€‰æ‹©ç›¸åº”çš„æ•°å­—ï¼" << std::endl;
 			}
 			break;
-		// ×¢²áÒµÎñ
+		// æ³¨å†Œä¸šåŠ¡
 		case Client::REGIST:
 			cln.bridge = false;
 			sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -109,19 +109,19 @@ void Client::start(Client & cln) {
 				exit(-1);
 				std::cout << GetLastError() << std::endl;
 			}
-			std::cout << "ÇëÊäÈë×¢²áµÄÓÃ»§Ãû£º";
+			std::cout << "è¯·è¾“å…¥æ³¨å†Œçš„ç”¨æˆ·åï¼š";
 			std::cin >> userName;
-			std::cout << "ÇëÊäÈëÄúµÄÃÜÂë£º";
+			std::cout << "è¯·è¾“å…¥æ‚¨çš„å¯†ç ï¼š";
 			std::cin >> passWord;
 			std::cin.get();
-			// ·¢ËÍ×¢²áĞÅÏ¢
+			// å‘é€æ³¨å†Œä¿¡æ¯
 			cln.sendContent = (std::string)"4" + HOST + SPLITTER + userName + SPLITTER + passWord;
 			send(sock, (cln.sendContent).c_str(), (cln.sendContent).size(), 0);
 			recv(sock, buffer, 1024, 0);
 			(cln.recvContent).assign(buffer);
 			msg = interprete(cln.recvContent, 0);
 			std::cout << "From:" << msg.subject << " " << msg.content << std::endl;
-			// ¸ù¾İ·şÎñÆ÷·´À¡»áµÄĞÅÏ¢ÇĞ»»×´Ì¬
+			// æ ¹æ®æœåŠ¡å™¨åé¦ˆä¼šçš„ä¿¡æ¯åˆ‡æ¢çŠ¶æ€
 			if (msg.content == REGIST_SUCCESS) {
 				cln.userName = userName;
 				status = Client::USING;
@@ -131,13 +131,13 @@ void Client::start(Client & cln) {
 			}
 			std::cout.flush();
 			break;
-		// ÏûÏ¢·¢ËÍÒµÎñ
+		// æ¶ˆæ¯å‘é€ä¸šåŠ¡
 		case Client::USING:
 			status = Client::ONLINE;
 			{
-				// ¿Í»§¶Ë·¢ËÍÏß³Ì
+				// å®¢æˆ·ç«¯å‘é€çº¿ç¨‹
 				ScopedThread st1(std::thread(&Client::sendThread, std::ref(cln), sock));
-				// ¿Í»§¶Ë½ÓÊÕÏß³Ì
+				// å®¢æˆ·ç«¯æ¥æ”¶çº¿ç¨‹
 				ScopedThread st2(std::thread(&Client::recvThread, std::ref(cln), sock));
 			}
 			std::cout << LOGOUT_SUCCESS << std::endl;
@@ -147,7 +147,7 @@ void Client::start(Client & cln) {
 	std::cout << THANK_MESSAGE << std::endl;
 }
 
-// ·¢ËÍÏß³Ì£¬Ö»¸ºÔğÏò·şÎñÆ÷·¢ËÍÏûÏ¢
+// å‘é€çº¿ç¨‹ï¼Œåªè´Ÿè´£å‘æœåŠ¡å™¨å‘é€æ¶ˆæ¯
 void Client::sendThread(Client & cln, SOCKET s) {
 	char buffer[1024];
 	while (true) {
@@ -156,7 +156,7 @@ void Client::sendThread(Client & cln, SOCKET s) {
 			std::cout << "@";
 			std::cin.getline(buffer, 1024);
 			cln.sendContent.assign(buffer);
-			// ½«ÓÃ»§ÊäÈë×ª»»³É·şÎñÆ÷ÄÜÊ¶±ğµÄĞÎÊ½
+			// å°†ç”¨æˆ·è¾“å…¥è½¬æ¢æˆæœåŠ¡å™¨èƒ½è¯†åˆ«çš„å½¢å¼
 			if (counterInterprete(cln.userName, cln.sendContent)) {
 				if (cln.sendContent[0] == '3') {
 					cln.bridge = true;
@@ -164,7 +164,7 @@ void Client::sendThread(Client & cln, SOCKET s) {
 				break;
 			}
 			else
-				std::cout << "·¢ËÍĞÅÏ¢¸ñÊ½ÓĞÎó£¡" << std::endl;
+				std::cout << "å‘é€ä¿¡æ¯æ ¼å¼æœ‰è¯¯ï¼" << std::endl;
 		}
 		send(s, cln.sendContent.c_str(), cln.sendContent.size(), 0);
 		if (cln.bridge)
@@ -172,7 +172,7 @@ void Client::sendThread(Client & cln, SOCKET s) {
 	}
 	
 }
-// ½ÓÊÕÏß³Ì£¬Ö»¸ºÔğ½ÓÊÕ·şÎñÆ÷·¢À´µÄÏûÏ¢
+// æ¥æ”¶çº¿ç¨‹ï¼Œåªè´Ÿè´£æ¥æ”¶æœåŠ¡å™¨å‘æ¥çš„æ¶ˆæ¯
 void Client::recvThread(Client & cln, SOCKET s) {
 	int totalLen = 0, msgLen;
 	char buffer[1024];
@@ -182,7 +182,7 @@ void Client::recvThread(Client & cln, SOCKET s) {
 		recv(s, buffer, 1024, 0);
 		cln.recvContent.assign(buffer);
 		totalLen = (cln.recvContent).size();
-		// ½âÎö·şÎñÆ÷·¢À´µÄÏûÏ¢
+		// è§£ææœåŠ¡å™¨å‘æ¥çš„æ¶ˆæ¯
 		while (totalLen > 0) {
 			msg = interprete(cln.recvContent, 0);
 			msgLen = messageLength(msg);
@@ -194,13 +194,13 @@ void Client::recvThread(Client & cln, SOCKET s) {
 			break;
 	}
 }
-// ÏÔÊ¾°ïÖúÒ³Ãæ
+// æ˜¾ç¤ºå¸®åŠ©é¡µé¢
 void Client::help() {
-	std::cout << "EasyChat Ìá¹©¶àÈËÔÚÏßÁÄÌì¹¦ÄÜ¡£" << std::endl;
-	std::cout << "³£¼ûÎÊÌâ£º" << std::endl;
-	std::cout << "ÈçºÎ·¢ËÍĞÅÏ¢£ºÓÃ»§Ãû + ¿Õ¸ñ + ÄúÒª·¢ËÍµÄÄÚÈİ¡£" << std::endl;
-	std::cout << "ÈçºÎÍË³öµÇÂ¼£º·¢ËÍSERVER + ¿Õ¸ñ + QUIT¼´¿ÉÍË³öµÇÂ¼¡£" << std::endl;
-	std::cout << "ÎªÊ²Ã´×¢²áÊ§°Ü£º¿ÉÄÜ³öÏÖÓëËûÈËÖØÃûµÄÇé¿ö£¬ÃÜÂë²»ÔÊĞíÎª¿Õ¡£" << std::endl;
-	std::cout << "ÎªÊ²Ã´ĞÅÏ¢·¢ËÍ³öÈ¥ºó£¬¶Ô·½Ã»ÓĞ»ØÓ¦£º¶Ô·½Ò²ĞíÄ¿Ç°²»ÔÚÏß£¬µÇÂ¼ºó¿ÉÊÕµ½Äú·¢ËÍµÄÏûÏ¢¡£" << std::endl;
+	std::cout << "EasyChat æä¾›å¤šäººåœ¨çº¿èŠå¤©åŠŸèƒ½ã€‚" << std::endl;
+	std::cout << "å¸¸è§é—®é¢˜ï¼š" << std::endl;
+	std::cout << "å¦‚ä½•å‘é€ä¿¡æ¯ï¼šç”¨æˆ·å + ç©ºæ ¼ + æ‚¨è¦å‘é€çš„å†…å®¹ã€‚" << std::endl;
+	std::cout << "å¦‚ä½•é€€å‡ºç™»å½•ï¼šå‘é€SERVER + ç©ºæ ¼ + QUITå³å¯é€€å‡ºç™»å½•ã€‚" << std::endl;
+	std::cout << "ä¸ºä»€ä¹ˆæ³¨å†Œå¤±è´¥ï¼šå¯èƒ½å‡ºç°ä¸ä»–äººé‡åçš„æƒ…å†µï¼Œå¯†ç ä¸å…è®¸ä¸ºç©ºã€‚" << std::endl;
+	std::cout << "ä¸ºä»€ä¹ˆä¿¡æ¯å‘é€å‡ºå»åï¼Œå¯¹æ–¹æ²¡æœ‰å›åº”ï¼šå¯¹æ–¹ä¹Ÿè®¸ç›®å‰ä¸åœ¨çº¿ï¼Œç™»å½•åå¯æ”¶åˆ°æ‚¨å‘é€çš„æ¶ˆæ¯ã€‚" << std::endl;
 	system("pause");
 }
