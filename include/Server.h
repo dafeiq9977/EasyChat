@@ -27,7 +27,7 @@ public:
 	static void connectionThread(Server &);
 	static void businessThread(Server &);
 	static SOCKET servsocket;
-	static int connection[1024];										//SOCKETÊÇunsigned int
+	static int connection[1024];
 };
 
 #endif;
